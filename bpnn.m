@@ -1,0 +1,14 @@
+num=xlsread('test.xlsx','Sheet1','A3:L38');
+inputtrain=num(1:36,5:8)';
+outputtrain=num(1:36,1:4)';
+inputtest=num(1:36,9:12)';
+[inputn,inputps]=mapminmax(inputtrain); 
+[outputn,outputps]=mapminmax(outputtrain);
+net=newff(inputn,outputn,5);
+net.trainParam.epochs=100;
+net.trainParam.lr=0.1;
+net.trainParam.goal=0.00004;
+net=train(net,inputn,outputn);
+inputntest=mapminmax('apply',inputtest,inputps);
+an=sim(net,inputntest);
+BPoutput=mapminmax('reverse',an,outputps)';
